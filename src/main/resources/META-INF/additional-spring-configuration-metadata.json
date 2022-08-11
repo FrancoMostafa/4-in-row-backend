@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "mongo.uri",
+    "type": "java.lang.String",
+    "description": "A description for 'mongo.uri'"
+  },
+  {
+    "name": "base.package",
+    "type": "java.lang.String",
+    "description": "A description for 'base.package'"
+  },
+  {
+    "name": "database.name",
+    "type": "java.lang.String",
+    "description": "A description for 'database.name'"
+  },
+  {
+    "name": "ws.game.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'ws.game.endpoint'"
+  },
+  {
+    "name": "ws.search.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'ws.search.endpoint'"
+  }
+]}
