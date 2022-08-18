@@ -10,26 +10,48 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import inrowbackend.model.Game;
+
 @Service
 public class HandlerWebSocketGame extends TextWebSocketHandler {
 	
-	private final Collection<WebSocketSession> webSocketSessions = Collections.synchronizedCollection(new ArrayList<>());
+	private Collection<Game> games = Collections.synchronizedCollection(new ArrayList<Game>());
+	private Object flag = new Object();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        webSocketSessions.add(session);
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        for(WebSocketSession webSocketSession : webSocketSessions){
-            webSocketSession.sendMessage(message);
+    	String messageData = message.toString();
+        if(messageData == "ADD ME TO GAME") {
+        	this.addSessionToGame(messageData, session);
+        }
+        else {
+        	this.sendMessageToGame(messageData);
         }
     }
 
-    @Override
+	@Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-    	webSocketSessions.remove(session);
     }
+	
+    private void addSessionToGame(String messageData, WebSocketSession session) {
+		synchronized (flag) {
+			Game game = this.getGameById(messageData);
+			if(game != null) {
+			}
+		}
+	}
+
+	private void sendMessageToGame(String messageData) {
+		
+	}
+	
+	private Game getGameById(String gameId) {
+		//return this.games.stream().findAny(g -> g.getGameId() == gameId).get().orElse(null);
+		return null;
+	}
     
 }
