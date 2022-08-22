@@ -5,13 +5,11 @@ import org.springframework.web.socket.WebSocketSession;
 public class Game {
 
 	private String gameId;
-	private WebSocketSession user1;
-	private WebSocketSession user2;
+	private WebSocketSession user1 = null;
+	private WebSocketSession user2 = null;
 	
-	public Game(String gameId, WebSocketSession user1, WebSocketSession user2) {
+	public Game(String gameId) {
 		this.gameId = gameId;
-		this.user1 = user1;
-		this.user2 = user2;
 	}
 
 	public String getGameId() {
@@ -36,6 +34,15 @@ public class Game {
 
 	public void setUser2(WebSocketSession user2) {
 		this.user2 = user2;
+	}
+	
+	public void addUser(WebSocketSession user) {
+		if (this.getUser1() == null) {
+			this.user1 = user;
+		}
+		else {
+			this.user2 = user;
+		}
 	}
 
 }
