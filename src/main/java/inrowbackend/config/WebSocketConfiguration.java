@@ -8,7 +8,8 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import inrowbackend.handlerWebSocket.HandlerWebSocketGame;
-import inrowbackend.handlerWebSocket.HandlerWebSocketSearch;
+import inrowbackend.handlerWebSocket.HandlerWebSocketSearchPrivate;
+import inrowbackend.handlerWebSocket.HandlerWebSocketSearchPublic;
 
 @Configuration
 @EnableWebSocket
@@ -17,19 +18,28 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 	@Value("${ws.game.endpoint}")
 	private String GAME_END_POINT;
 	
-	@Value("${ws.search.endpoint}")
-	private String SEARCH_END_POINT;
+	@Value("${ws.searchpublic.endpoint}")
+	private String SEARCH_PUBLIC_END_POINT;
+	
+	@Value("${ws.searchprivate.endpoint}")
+	private String SEARCH_PRIVATE_END_POINT;
 	
 	@Autowired
 	private HandlerWebSocketGame handlerWebSocketGame;
+	
 	@Autowired
-	private HandlerWebSocketSearch handlerWebSocketSearch;
+	private HandlerWebSocketSearchPublic handlerWebSocketSearchPublic;
+	
+	@Autowired
+	private HandlerWebSocketSearchPrivate handlerWebSocketSearchPrivate;
 	
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry.addHandler(handlerWebSocketGame, GAME_END_POINT)
                 .setAllowedOrigins("*");
-        webSocketHandlerRegistry.addHandler(handlerWebSocketSearch, SEARCH_END_POINT)
+        webSocketHandlerRegistry.addHandler(handlerWebSocketSearchPublic, SEARCH_PUBLIC_END_POINT)
+        .setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(handlerWebSocketSearchPrivate, SEARCH_PRIVATE_END_POINT)
         .setAllowedOrigins("*");
     }
 
@@ -37,8 +47,12 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 		this.handlerWebSocketGame = handlerWebSocketGame;
 	}
 
-	public HandlerWebSocketSearch getHandlerWebSocketSearch() {
-		return handlerWebSocketSearch;
+	public HandlerWebSocketSearchPublic getHandlerWebSocketSearch() {
+		return handlerWebSocketSearchPublic;
+	}
+	
+	public HandlerWebSocketSearchPrivate getHandlerWebSocketPrivate() {
+		return handlerWebSocketSearchPrivate;
 	}
 
 }

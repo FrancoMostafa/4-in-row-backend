@@ -3,6 +3,9 @@ package inrowbackend.handlerWebSocket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -12,10 +15,10 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Service
-public class HandlerWebSocketSearch extends TextWebSocketHandler {
-
+public class HandlerWebSocketSearchPrivate extends TextWebSocketHandler {
+	
 	private Collection<WebSocketSession> webSocketSessions = Collections.synchronizedCollection(new ArrayList<>());
-	private WebSocketSession waitingUser = null;
+    private Map<String, WebSocketSession> users = Collections.synchronizedMap(new HashMap<String, WebSocketSession>());
 	private Object flag = new Object();
 
 	@Override
@@ -26,26 +29,29 @@ public class HandlerWebSocketSearch extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		synchronized (flag) {
-			if (waitingUser == null) {
-				waitingUser = session;
-				session.sendMessage(new TextMessage("Waiting"));
-			} else {
+			String gameNumber = message.getPayload();
+			if(users.get(gameNumber) == null) {
+				users.put(gameNumber, session);
+			}
+			else {
 				TextMessage gameId = new TextMessage(UUID.randomUUID().toString());
 				session.sendMessage(gameId);
-				waitingUser.sendMessage(gameId);
-				waitingUser = null;
+				users.get(gameNumber).sendMessage(gameId);
+				users.remove(gameNumber);
 			}
 		}
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		synchronized (flag) {
-			if(waitingUser != null && session.getId() == waitingUser.getId()) {
-				waitingUser = null;
-			}
-			webSocketSessions.remove(session);
+		for (Entry<String, WebSocketSession> entry : users.entrySet()) {
+		    if(entry.getValue().getId() == session.getId()) {
+		    	users.remove(entry);
+		    	break;
+		    }
 		}
+		webSocketSessions.remove(session);
 	}
 
 }

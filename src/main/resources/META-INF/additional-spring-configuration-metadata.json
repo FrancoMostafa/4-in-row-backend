@@ -23,5 +23,15 @@
     "name": "ws.search.endpoint",
     "type": "java.lang.String",
     "description": "A description for 'ws.search.endpoint'"
+  },
+  {
+    "name": "ws.searchpublic.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'ws.searchpublic.endpoint'"
+  },
+  {
+    "name": "ws.searchprivate.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'ws.searchprivate.endpoint'"
   }
 ]}

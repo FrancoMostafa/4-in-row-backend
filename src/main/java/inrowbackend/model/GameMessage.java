@@ -2,6 +2,8 @@ package inrowbackend.model;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class GameMessage {
 	
 	private String gameId;
@@ -48,6 +50,16 @@ public class GameMessage {
 
 	public void setDetail(String detail) {
 		this.detail = detail;
+	}
+
+	@Override
+	public String toString() {
+		JSONObject jsonGameMessage = new JSONObject();
+		jsonGameMessage.put("gameId", gameId);
+		jsonGameMessage.put("gameBoard", gameBoard);
+		jsonGameMessage.put("chat", chat);
+		jsonGameMessage.put("detail", detail);
+		return jsonGameMessage.toString();
 	}
 	
 }
