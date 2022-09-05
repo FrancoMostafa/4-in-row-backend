@@ -5,8 +5,8 @@ import org.json.JSONObject;
 public class GameMessage {
 	
 	private String gameId;
-	private String player1;
-	private String player2;
+	private String player1Name;
+	private String player2Name;
 	private Object gameBoard;
 	private Object chat;
 	private String detail;
@@ -27,20 +27,20 @@ public class GameMessage {
 		this.gameId = gameId;
 	}
 
-	public String getPlayer1() {
-		return player1;
+	public String getPlayer1Name() {
+		return player1Name;
 	}
 
-	public void setPlayer1(String player1) {
-		this.player1 = player1;
+	public void setPlayer1Name(String player1Name) {
+		this.player1Name = player1Name;
 	}
 
-	public String getPlayer2() {
-		return player2;
+	public String getPlayer2Name() {
+		return player2Name;
 	}
 
-	public void setPlayer2(String player2) {
-		this.player2 = player2;
+	public void setPlayer2Name(String player2Name) {
+		this.player2Name = player2Name;
 	}
 
 	public Object getGameBoard() {
@@ -67,17 +67,17 @@ public class GameMessage {
 		this.detail = detail;
 	}
 	
-	public void setPlayersNames(String player1, String player2) {
-		this.player1 = player1;
-		this.player2 = player2;
+	public void setPlayers(String player1Name,String player2Name) {
+		this.player1Name = player1Name;
+		this.player2Name = player2Name;
 	}
 
 	@Override
 	public String toString() {
 		JSONObject jsonGameMessage = new JSONObject();
 		jsonGameMessage.put("gameId", gameId);
-		jsonGameMessage.put("player1", player1);
-		jsonGameMessage.put("player2", player2);
+		jsonGameMessage.put("player1Name", player1Name);
+		jsonGameMessage.put("player2Name", player2Name);
 		jsonGameMessage.put("gameBoard", gameBoard);
 		jsonGameMessage.put("chat", chat);
 		jsonGameMessage.put("detail", detail);
