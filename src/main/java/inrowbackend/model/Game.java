@@ -37,6 +37,22 @@ public class Game {
 		this.user2 = user2;
 	}
 	
+	public String getName1() {
+		return this.getUser1().getValue0();
+	}
+	
+	public String getName2() {
+		return this.getUser2().getValue0();
+	}
+	
+	public WebSocketSession getWs1() {
+		return this.getUser1().getValue1();
+	}
+	
+	public WebSocketSession getWs2() {
+		return this.getUser2().getValue1();
+	}
+	
 	public void addUser(Pair<String, WebSocketSession>  user) {
 		if (this.getUser1() == null) {
 			this.user1 = user;

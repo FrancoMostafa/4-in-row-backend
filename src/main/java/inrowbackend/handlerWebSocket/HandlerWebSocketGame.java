@@ -59,8 +59,8 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 				session.sendMessage(new TextMessage("WAITING"));
 			}
 			else {
-				game.getUser1().getValue1().sendMessage(new TextMessage("READY"));
-				game.getUser2().getValue1().sendMessage(new TextMessage("READY"));
+				game.getWs1().sendMessage(new TextMessage("READY"));
+				game.getWs2().sendMessage(new TextMessage("READY"));
 			}
 		}
 	}
@@ -71,9 +71,9 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 	
 	private void sendMessageToGame(GameMessage data) throws IOException {
 		var game = this.getGameById(data.getGameId());
-		data.setPlayersNames(game.getUser1().getValue0(), game.getUser2().getValue0());
-		((Game) game).getUser1().getValue1().sendMessage(new TextMessage(data.toString()));
-		((Game) game).getUser2().getValue1().sendMessage(new TextMessage(data.toString()));
+		data.setPlayersNames(game.getName1(), game.getName2());
+		((Game) game).getWs1().sendMessage(new TextMessage(data.toString()));
+		((Game) game).getWs2().sendMessage(new TextMessage(data.toString()));
 	}
 	
 	private GameMessage messageToGameMessageObject(TextMessage message) {
@@ -96,8 +96,8 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
     private void clearGames(String session) {
         Iterator<Game> iterator = this.games.iterator();
         while (iterator.hasNext()) {
-        	if(!iterator.next().isReady() || iterator.next().getUser1().getValue1().getId().equals(session)
-        			|| iterator.next().getUser2().getValue1().getId().equals(session)) {
+        	if(!iterator.next().isReady() || iterator.next().getWs1().getId().equals(session)
+        			|| iterator.next().getWs2().getId().equals(session)) {
         		this.games.remove(iterator.next());
         	}
         }
