@@ -80,7 +80,7 @@ public class HandlerWebSocketSearchPrivate extends TextWebSocketHandler {
 	
 	private Entry<String, WebSocketSession> getGameBySession(WebSocketSession session) {
 		for (Entry<String, WebSocketSession> entry : users.entrySet()) {
-		    if(entry.getValue().getId() == session.getId()) {
+		    if(entry.getValue().getId().equals(session.getId())) {
 		    	return entry;
 		    }
 		}
