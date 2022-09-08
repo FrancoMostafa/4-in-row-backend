@@ -57,7 +57,7 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 				this.sendMessageWaiting(gameData, session);
 			}
 			else {
-				this.sendMessageToGame(new GameMessage(gameData.getGameId(),new ArrayList<String>(Arrays.asList(game.getName1(), game.getWs1().getId(), game.getName2(), game.getWs2().getId())), "READY"), game);
+				this.sendMessageToGame(new GameMessage(gameData.getGameId(),new ArrayList<String>(Arrays.asList(game.getUserData1(), game.getUserData2())), "READY"), game);
 			}
 		}
 	}
@@ -91,9 +91,9 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 			return game.get(0);
 		}
 	}
-	
     
     private void endGame(WebSocketSession session) throws IOException {
+		synchronized (flag) {
 		GameMessage messageDisconnect = new GameMessage(null, null, "DISCONNECT");
         for(int i = 0; i < games.size(); i++) {
         	WebSocketSession session1 = games.get(i).getWs1();
@@ -109,9 +109,9 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
         	if (!(session1.isOpen() && session2.isOpen())
         			|| (session1 == null && session2 == null)) {
         		games.remove(i);
-        	}
-        	
+        	}  	
         }
+		}
     }
     
 }

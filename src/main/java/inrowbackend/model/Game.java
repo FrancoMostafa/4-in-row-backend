@@ -37,11 +37,11 @@ public class Game {
 		this.user2 = user2;
 	}
 	
-	public String getName1() {
+	public String getUserData1() {
 		return this.getUser1().getValue0();
 	}
 	
-	public String getName2() {
+	public String getUserData2() {
 		return this.getUser2().getValue0();
 	}
 	
