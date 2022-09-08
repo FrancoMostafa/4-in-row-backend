@@ -2,6 +2,7 @@ package inrowbackend.handlerWebSocket;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,11 +31,12 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		synchronized (flag) {
 			var gameData = this.messageToGameMessageObject(message);
-			if(gameData.getDetail().contains("ADD ME TO GAME;")) {
-				this.addSessionToGame(gameData, session);
+			Game game = this.getGameById(gameData.getGameId());
+			if(gameData.getDetail().equals("ADD ME TO GAME")) {
+				this.addSessionToGame(gameData, game, session);
 			}
         	else {
-        		this.sendMessageToGame(gameData);
+        		this.sendMessageToGame(gameData, game);
         	}
 		}
     }
@@ -44,20 +46,18 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 		this.endGame(session);
     }
 
-	private void addSessionToGame(GameMessage gameData, WebSocketSession session) throws IOException {
+	private void addSessionToGame(GameMessage gameData, Game game, WebSocketSession session) throws IOException {
 		synchronized (flag) {
-			Game game = this.getGameById(gameData.getGameId());
 			if(game == null) {
 				this.createGame(gameData.getGameId());
 				game = this.getGameById(gameData.getGameId());
 			}
-			String name = gameData.getDetail().split(";")[1];
-			game.addUser(new Pair<String, WebSocketSession>(name,session));
+			game.addUser(new Pair<String, WebSocketSession>((String) gameData.getData(),session));
 			if(!game.isReady()) {
 				this.sendMessageWaiting(gameData, session);
 			}
 			else {
-				this.sendMessageToGame(new GameMessage(gameData.getGameId(), new ArrayList<Object>(), new ArrayList<Object>(), "READY"));
+				this.sendMessageToGame(new GameMessage(gameData.getGameId(),new ArrayList<String>(Arrays.asList(game.getName1(), game.getWs1().getId(), game.getName2(), game.getWs2().getId())), "READY"), game);
 			}
 		}
 	}
@@ -66,22 +66,20 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 		this.games.add(new Game(gameId));
 	}
 	
-	private void sendMessageToGame(GameMessage data) throws IOException {
-		var game = this.getGameById(data.getGameId());
-		data.setPlayers(game.getName1(), game.getName2());
+	private void sendMessageToGame(GameMessage data, Game game) throws IOException {
 		((Game) game).getWs1().sendMessage(new TextMessage(data.toString()));
 		((Game) game).getWs2().sendMessage(new TextMessage(data.toString()));
 	}
 	
 	private void sendMessageWaiting(GameMessage gameData, WebSocketSession session) throws IOException {
-		GameMessage messageWaiting = new GameMessage(gameData.getGameId(), null, null, "WAITING");
+		GameMessage messageWaiting = new GameMessage(gameData.getGameId(), null, "WAITING");
 		session.sendMessage(new TextMessage(messageWaiting.toString()));
 	}
 	
 	private GameMessage messageToGameMessageObject(TextMessage message) {
 		var messageData = message.getPayload();
 		JSONObject jsonData = new JSONObject(messageData);  
-		return new GameMessage(jsonData.get("gameId"),jsonData.get("gameBoard"),jsonData.get("chat"),jsonData.get("detail"));
+		return new GameMessage(jsonData.get("gameId"),jsonData.get("data"),jsonData.get("detail"));
 	}
 	
 	private Game getGameById(String data) {
@@ -96,7 +94,7 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 	
     
     private void endGame(WebSocketSession session) throws IOException {
-		GameMessage messageDisconnect = new GameMessage(null, null, null, "DISCONNECT");
+		GameMessage messageDisconnect = new GameMessage(null, null, "DISCONNECT");
         for(int i = 0; i < games.size(); i++) {
         	WebSocketSession session1 = games.get(i).getWs1();
         	WebSocketSession session2 = games.get(i).getWs2();
