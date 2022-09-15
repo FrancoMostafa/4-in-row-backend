@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.javatuples.Pair;
@@ -57,7 +58,9 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 				this.sendMessageWaiting(gameData, session);
 			}
 			else {
-				this.sendMessageToGame(new GameMessage(gameData.getGameId(),new ArrayList<String>(Arrays.asList(game.getUserData1(), game.getUserData2())), "READY"), game);
+				Random random = new Random();
+				game.setIntialTurn(random.nextInt((2 - 1) + 1) + 1);
+				this.sendMessageToGame(new GameMessage(gameData.getGameId(),new ArrayList<Object>(Arrays.asList(game.getUserData1(), game.getUserData2(), game.getInitialTurn())), "READY"), game);
 			}
 		}
 	}
@@ -67,8 +70,8 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 	}
 	
 	private void sendMessageToGame(GameMessage data, Game game) throws IOException {
-		((Game) game).getWs1().sendMessage(new TextMessage(data.toString()));
-		((Game) game).getWs2().sendMessage(new TextMessage(data.toString()));
+			((Game) game).getWs1().sendMessage(new TextMessage(data.toString()));
+			((Game) game).getWs2().sendMessage(new TextMessage(data.toString()));
 	}
 	
 	private void sendMessageWaiting(GameMessage gameData, WebSocketSession session) throws IOException {
@@ -98,16 +101,15 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
         for(int i = 0; i < games.size(); i++) {
         	WebSocketSession session1 = games.get(i).getWs1();
         	WebSocketSession session2 = games.get(i).getWs2();
-        	if(session1 != null && session1.getId().equals(session.getId())) {
-        		session2.sendMessage(new TextMessage(messageDisconnect.toString()));
-        	}
-        	
-        	else if (session2 != null && session2.getId().equals(session.getId())) {
+        	if(session1.getId().equals(session.getId()) || session2.getId().equals(session.getId())) {
+        		if(session1.isOpen()) {
         		session1.sendMessage(new TextMessage(messageDisconnect.toString()));
+        		}
+        		if(session2.isOpen()) {
+            		session2.sendMessage(new TextMessage(messageDisconnect.toString()));
+        		}
         	}
-        	
-        	if (!(session1.isOpen() && session2.isOpen())
-        			|| (session1 == null && session2 == null)) {
+        	if (!(session1.isOpen() && session2.isOpen())) {
         		games.remove(i);
         	}  	
         }

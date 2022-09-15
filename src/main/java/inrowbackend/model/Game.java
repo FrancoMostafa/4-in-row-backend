@@ -8,6 +8,7 @@ public class Game {
 	private String gameId;
 	private Pair<String, WebSocketSession> user1 = null;
 	private Pair<String, WebSocketSession> user2 = null;
+	private Integer initialTurn = null;
 	
 	public Game(String gameId) {
 		this.gameId = gameId;
@@ -51,6 +52,16 @@ public class Game {
 	
 	public WebSocketSession getWs2() {
 		return this.getUser2().getValue1();
+	}
+	
+	public void setIntialTurn(Integer value) {
+		if(this.getInitialTurn() == null) {
+			this.initialTurn = value;
+		}
+	}
+	
+	public Integer getInitialTurn() {
+		return initialTurn;
 	}
 	
 	public void addUser(Pair<String, WebSocketSession>  user) {

@@ -6,13 +6,12 @@ public class GameMessage {
 	
 	private String gameId;
 	private Object data;
-	private String detail;
+	private Object detail;
 	
 	public GameMessage(Object gameId, Object data, Object detail) {
-		super();
 		this.gameId = (String) gameId;
 		this.data = data;
-		this.detail = (String) detail;
+		this.detail = detail;
 	}
 
 	public String getGameId() {
@@ -23,7 +22,7 @@ public class GameMessage {
 		this.gameId = gameId;
 	}
 
-	public String getDetail() {
+	public Object getDetail() {
 		return detail;
 	}
 
