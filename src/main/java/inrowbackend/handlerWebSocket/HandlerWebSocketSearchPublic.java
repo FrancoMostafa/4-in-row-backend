@@ -40,7 +40,7 @@ public class HandlerWebSocketSearchPublic extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		synchronized (flag) {
-			if(waitingUser != null && session.getId() == waitingUser.getId()) {
+			if(waitingUser != null || !waitingUser.isOpen()) {
 				waitingUser = null;
 			}
 			webSocketSessions.remove(session);

@@ -101,18 +101,16 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
         for(int i = 0; i < games.size(); i++) {
         	WebSocketSession session1 = games.get(i).getWs1();
         	WebSocketSession session2 = games.get(i).getWs2();
-        	if(session1.getId().equals(session.getId()) || session2.getId().equals(session.getId())) {
         		if(session1.isOpen()) {
-        		session1.sendMessage(new TextMessage(messageDisconnect.toString()));
+        			session1.sendMessage(new TextMessage(messageDisconnect.toString()));
         		}
         		if(session2.isOpen()) {
             		session2.sendMessage(new TextMessage(messageDisconnect.toString()));
         		}
+        		if (!(session1.isOpen() && session2.isOpen())) {
+        			games.remove(i);
+        		}  	
         	}
-        	if (!(session1.isOpen() && session2.isOpen())) {
-        		games.remove(i);
-        	}  	
-        }
 		}
     }
     
