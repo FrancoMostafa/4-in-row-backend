@@ -15,6 +15,9 @@ import inrowbackend.handlerWebSocket.HandlerWebSocketSearchPublic;
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 	
+	@Value("${ws.home.endpoint}")
+	private String HOME_END_POINT;
+	
 	@Value("${ws.game.endpoint}")
 	private String GAME_END_POINT;
 	
@@ -23,6 +26,9 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 	
 	@Value("${ws.searchprivate.endpoint}")
 	private String SEARCH_PRIVATE_END_POINT;
+	
+	@Autowired
+	private HandlerWebSocketGame handlerWebSocketHome;
 	
 	@Autowired
 	private HandlerWebSocketGame handlerWebSocketGame;
@@ -35,6 +41,8 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 	
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
+        webSocketHandlerRegistry.addHandler(handlerWebSocketHome, HOME_END_POINT)
+        .setAllowedOrigins("*");
         webSocketHandlerRegistry.addHandler(handlerWebSocketGame, GAME_END_POINT)
                 .setAllowedOrigins("*");
         webSocketHandlerRegistry.addHandler(handlerWebSocketSearchPublic, SEARCH_PUBLIC_END_POINT)

@@ -33,5 +33,10 @@
     "name": "ws.searchprivate.endpoint",
     "type": "java.lang.String",
     "description": "A description for 'ws.searchprivate.endpoint'"
+  },
+  {
+    "name": "ws.home.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'ws.home.endpoint'"
   }
 ]}

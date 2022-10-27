@@ -81,7 +81,7 @@ public class HandlerWebSocketGame extends TextWebSocketHandler {
 	
 	private GameMessage messageToGameMessageObject(TextMessage message) {
 		var messageData = message.getPayload();
-		JSONObject jsonData = new JSONObject(messageData);  
+		JSONObject jsonData = new JSONObject(messageData);
 		return new GameMessage(jsonData.get("gameId"),jsonData.get("data"),jsonData.get("detail"));
 	}
 	
