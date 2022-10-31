@@ -5,44 +5,55 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+@Service
 public class HandlerWebSocketHome extends TextWebSocketHandler {
 
-	private Collection<WebSocketSession> usersInHome = Collections.synchronizedCollection(new ArrayList<>());
-	private Object flag = new Object();
+	private Collection<WebSocketSession> webSocketHomeSessions = Collections.synchronizedCollection(new ArrayList<>());
 
-	public Collection<WebSocketSession> getUsersInHome() {
-		return usersInHome;
+	public Collection<WebSocketSession> getWebSocketHomeSessions() {
+		return webSocketHomeSessions;
 	}
 	
 	@Override
-	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		synchronized (flag) {
-			usersInHome.add(session);
-		}
+	public synchronized void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		webSocketHomeSessions.add(session);
 	}
 
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		synchronized (flag) {
-		usersInHome.forEach(s -> {
+	protected synchronized void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		webSocketHomeSessions.forEach(w -> {
 			try {
-				s.sendMessage(new TextMessage(String.valueOf(usersInHome.size())));
+				if(w.isOpen()) {
+					w.sendMessage(new TextMessage(String.valueOf(webSocketHomeSessions.size()).toString()));
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		});
-		}
 	}
 	
 	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		synchronized (flag) {
-			usersInHome.remove(session);
+	public synchronized void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		webSocketHomeSessions.forEach(w -> {
+				if(w.getId().equals(session.getId())) {
+					webSocketHomeSessions.remove(w);
+				}
+			});
+		webSocketHomeSessions.forEach(w -> {
+			if(w.isOpen()) {
+				try {
+					w.sendMessage(new TextMessage(String.valueOf(webSocketHomeSessions.size())));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		}
-	}
+	
 }

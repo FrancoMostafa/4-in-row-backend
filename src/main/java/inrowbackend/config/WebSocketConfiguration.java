@@ -8,6 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import inrowbackend.handlerWebSocket.HandlerWebSocketGame;
+import inrowbackend.handlerWebSocket.HandlerWebSocketHome;
 import inrowbackend.handlerWebSocket.HandlerWebSocketSearchPrivate;
 import inrowbackend.handlerWebSocket.HandlerWebSocketSearchPublic;
 
@@ -28,7 +29,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 	private String SEARCH_PRIVATE_END_POINT;
 	
 	@Autowired
-	private HandlerWebSocketGame handlerWebSocketHome;
+	private HandlerWebSocketHome handlerWebSocketHome;
 	
 	@Autowired
 	private HandlerWebSocketGame handlerWebSocketGame;
