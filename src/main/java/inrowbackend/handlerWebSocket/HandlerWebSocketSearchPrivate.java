@@ -26,6 +26,7 @@ public class HandlerWebSocketSearchPrivate extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		System.out.println("NEW PRIVATE OPEN SESSION");
 		webSocketSessions.add(session);
 	}
 
@@ -70,7 +71,6 @@ public class HandlerWebSocketSearchPrivate extends TextWebSocketHandler {
 	
 	private Entry<String, WebSocketSession> getGameByCode(String code) {
 		for (Entry<String, WebSocketSession> entry : users.entrySet()) {
-			System.out.println(entry);
 		    if(entry.getKey().equals(code)) {
 		    	return entry;
 		    }

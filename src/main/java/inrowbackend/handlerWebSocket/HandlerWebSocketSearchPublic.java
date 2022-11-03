@@ -43,7 +43,7 @@ public class HandlerWebSocketSearchPublic extends TextWebSocketHandler {
 			if(waitingUser != null) {
 				waitingUser = null;
 			}
-			webSocketSessions.remove(session);
+			webSocketSessions.removeIf(s -> s.getId().equals(session.getId()));
 		}
 	}
 
