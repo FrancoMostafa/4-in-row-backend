@@ -40,8 +40,6 @@ public class HandlerWebSocketHome extends TextWebSocketHandler {
 	
 	@Override
 	public synchronized void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		System.out.println("CLOSE SESSION OF: " + session.getId());
-		System.out.println("SESSIONS: " + usersInHome);
 		usersInHome.removeIf(s -> s.getId().equals(session.getId()));
 		usersInHome.forEach(w -> {
 			if(w.isOpen()) {
