@@ -7,5 +7,5 @@ import inrowbackend.model.StatisticsModel;
 
 @Repository
 public interface StatisticsRepository extends MongoRepository<StatisticsModel, String> {
+	
 }
-
