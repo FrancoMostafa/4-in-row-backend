@@ -26,15 +26,15 @@ public class StatisticsController {
 		return new ResponseEntity<List<StatisticsModel>>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/{day}/{month}/{year}", method = RequestMethod.GET)
+	@RequestMapping(value = "/get/{day}/{month}/{year}", method = RequestMethod.POST)
 	public ResponseEntity<StatisticsModel> getStatisticsByDate(@PathVariable Integer day,@PathVariable  Integer month, @PathVariable Integer year) {
 		StatisticsModel response = statisticsService.getStatisticsByDate(day, month, year);
 		return new ResponseEntity<StatisticsModel>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/{gameId}/{type}/{state}/{player1Country}/{player2Country}", method = RequestMethod.POST)
-	public ResponseEntity<StatisticsModel> addStatisticsData(@PathVariable String gameId, @PathVariable String type, @PathVariable String state , @PathVariable String player1Country,@PathVariable  String player2Country) {
-		StatisticsModel response = statisticsService.addStatisticsData(gameId, type, state, player1Country, player2Country);
+	@RequestMapping(value = "/{gameId}/{type}/{state}/{playerCountry}", method = RequestMethod.POST)
+	public ResponseEntity<StatisticsModel> addStatisticsData(@PathVariable String gameId, @PathVariable String type, @PathVariable String state , @PathVariable String playerCountry) {
+		StatisticsModel response = statisticsService.addStatisticsData(gameId, type, state, playerCountry);
 		return new ResponseEntity<StatisticsModel>(response, HttpStatus.CREATED);
 	}
 

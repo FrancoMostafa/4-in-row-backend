@@ -2,7 +2,9 @@ package inrowbackend.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,28 +16,28 @@ public class StatisticsModel {
     private String id;
     
 	private LocalDate date;
-	private List<String> publicGamesStarted;
-	private List<String> publicGamesFinished;
-	private List<String> privateGamesStarted;
-	private List<String> privateGamesFinished;
+	private Set<String> publicGamesStarted;
+	private Set<String> publicGamesFinished;
+	private Set<String> privateGamesStarted;
+	private Set<String> privateGamesFinished;
 	private List<String> playersCountries;
 	
 	
 	public StatisticsModel() {
 		this.date = LocalDate.now();
-		publicGamesStarted = new ArrayList<String>();
-		publicGamesFinished = new ArrayList<String>();
-		privateGamesStarted = new ArrayList<String>();
-		privateGamesFinished = new ArrayList<String>();
+		publicGamesStarted = new HashSet<String>();
+		publicGamesFinished = new HashSet<String>();
+		privateGamesStarted = new HashSet<String>();
+		privateGamesFinished = new HashSet<String>();
 		playersCountries = new ArrayList<String>();
 	}
 	
 	public StatisticsModel(LocalDate today) {
 		this.date = today;
-		publicGamesStarted = new ArrayList<String>();
-		publicGamesFinished = new ArrayList<String>();
-		privateGamesStarted = new ArrayList<String>();
-		privateGamesFinished = new ArrayList<String>();
+		publicGamesStarted = new HashSet<String>();
+		publicGamesFinished = new HashSet<String>();
+		privateGamesStarted = new HashSet<String>();
+		privateGamesFinished = new HashSet<String>();
 		playersCountries = new ArrayList<String>();
 	}
 	
@@ -51,35 +53,35 @@ public class StatisticsModel {
 		this.date = date;
 	}
 	
-	public List<String> getPublicGamesStarted() {
+	public Set<String> getPublicGamesStarted() {
 		return publicGamesStarted;
 	}
 	
-	public void setPublicGamesStarted(List<String> publicGamesStarted) {
+	public void setPublicGamesStarted(Set<String> publicGamesStarted) {
 		this.publicGamesStarted = publicGamesStarted;
 	}
 	
-	public List<String> getPublicGamesFinished() {
+	public Set<String> getPublicGamesFinished() {
 		return publicGamesFinished;
 	}
 	
-	public void setPublicGamesFinished(List<String> publicGamesFinished) {
+	public void setPublicGamesFinished(Set<String> publicGamesFinished) {
 		this.publicGamesFinished = publicGamesFinished;
 	}
 	
-	public List<String> getPrivateGamesStarted() {
+	public Set<String> getPrivateGamesStarted() {
 		return privateGamesStarted;
 	}
 	
-	public void setPrivateGamesStarted(List<String> privateGamesStarted) {
+	public void setPrivateGamesStarted(Set<String> privateGamesStarted) {
 		this.privateGamesStarted = privateGamesStarted;
 	}
 	
-	public List<String> getPrivateGamesFinished() {
+	public Set<String> getPrivateGamesFinished() {
 		return this.privateGamesFinished;
 	}
 	
-	public void setPrivateGamesFinished(List<String> privateGamesFinished) {
+	public void setPrivateGamesFinished(Set<String> privateGamesFinished) {
 		this.privateGamesFinished = privateGamesFinished;
 	}
 	

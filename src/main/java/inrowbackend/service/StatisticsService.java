@@ -33,31 +33,31 @@ public class StatisticsService {
 	}
 
 	public synchronized StatisticsModel addStatisticsData(String gameId, String type, String state,
-		String player1Country, String player2Country) {
+		String playerCountry) {
 		LocalDate today = LocalDate.now();
 		if(!this.thisDayIsSaveInDB(today)) {
 			this.addStatisticsDocumentInDB(today);
 		}
-		StatisticsModel result =  this.modifyStatisticsDocumentInDB(today, gameId, type, state, player1Country, player2Country);
+		StatisticsModel result =  this.modifyStatisticsDocumentInDB(today, gameId, type, state, playerCountry);
 		return result;
 	}
 
-	private synchronized StatisticsModel modifyStatisticsDocumentInDB(LocalDate today, String gameId, String type, String state, String player1Country, String player2Country) {
+	private synchronized StatisticsModel modifyStatisticsDocumentInDB(LocalDate today, String gameId, String type, String state, String playerCountry) {
 		StatisticsModel statistics = this.getStatisticsByDate(today.getDayOfMonth(), today.getMonth().getValue(), today.getYear());
-		statistics.getPlayersCountries().add(player1Country);
-		statistics.getPlayersCountries().add(player2Country);
-		if(type == "PUBLIC" && state == "STARTED") {
+		statistics.getPlayersCountries().add(playerCountry);
+		if(type.equals("PUBLIC") && state.equals("STARTED")) {
+				statistics.getPublicGamesStarted().add(gameId);
 				statisticsRepository.save(statistics);
 				return statistics;
 			
 		}
-		else if(type == "PUBLIC" && state == "FINISHED") {
-				statistics.getPrivateGamesStarted().add(gameId);
+		else if(type.equals("PUBLIC") && state.equals("FINISHED")) {
+				statistics.getPublicGamesFinished().add(gameId);
 				statisticsRepository.save(statistics);
 				return statistics;
 			
 		}
-		else if(type == "PRIVATE" && state == "STARTED") {
+		else if(type.equals("PRIVATE") && type.equals("STARTED")) {
 				statistics.getPrivateGamesStarted().add(gameId);
 				statisticsRepository.save(statistics);
 				return statistics;
