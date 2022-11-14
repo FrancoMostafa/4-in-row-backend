@@ -34,8 +34,16 @@ public class StatisticsController {
 	
 	@RequestMapping(value = "/{gameId}/{type}/{state}/{playerCountry}", method = RequestMethod.POST)
 	public ResponseEntity<StatisticsModel> addStatisticsData(@PathVariable String gameId, @PathVariable String type, @PathVariable String state , @PathVariable String playerCountry) {
-		StatisticsModel response = statisticsService.addStatisticsData(gameId, type, state, playerCountry);
+		String countryResult = this.getCountryResult(playerCountry);
+		StatisticsModel response = statisticsService.addStatisticsData(gameId, type, state, countryResult);
 		return new ResponseEntity<StatisticsModel>(response, HttpStatus.CREATED);
 	}
-
+	
+	private String getCountryResult(String data) {
+		if(!data.equals("DESCONOCIDO")) {
+			return data.replace("_", " ");
+		}
+		return "DESCONOCIDO";
+	}
+	
 }

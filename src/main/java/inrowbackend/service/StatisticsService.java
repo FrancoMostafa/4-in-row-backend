@@ -73,6 +73,10 @@ public class StatisticsService {
 	
 	private synchronized void addStatisticsDocumentInDB(LocalDate today) {
 		StatisticsModel statistics = new StatisticsModel(today);
+		List<StatisticsModel> response = statisticsRepository.findAll();
+		if(response.size() == 30) {
+			statisticsRepository.delete(this.getTheOldest(response));
+		}
 		statisticsRepository.save(statistics);
 	}
 	
@@ -85,6 +89,15 @@ public class StatisticsService {
 		}
 		return false;
 	}
-
 	
+	private synchronized StatisticsModel getTheOldest(List<StatisticsModel> data) {
+		StatisticsModel result = data.get(0);
+		for(int i = 0; i < data.size(); i++) {
+			if(data.get(i).isOlderThan(result)) {
+				result = data.get(i);
+			}
+		}
+		return result;
+	}
+
 }

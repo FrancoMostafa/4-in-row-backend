@@ -96,5 +96,10 @@ public class StatisticsModel {
 	public boolean isOfDate(Integer day, Integer month, Integer year) {
 		return this.getDate().getDayOfMonth() == day && this.getDate().getMonth().getValue() == month && this.getDate().getYear() == year;
 	}
+	
+	public boolean isOlderThan(StatisticsModel otherStatistics) {
+		return otherStatistics.getDate().isAfter(this.getDate());
+				
+	}
 
 }
