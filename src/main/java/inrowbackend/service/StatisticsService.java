@@ -44,7 +44,9 @@ public class StatisticsService {
 
 	private synchronized StatisticsModel modifyStatisticsDocumentInDB(LocalDate today, String gameId, String type, String state, String playerCountry) {
 		StatisticsModel statistics = this.getStatisticsByDate(today.getDayOfMonth(), today.getMonth().getValue(), today.getYear());
-		statistics.getPlayersCountries().add(playerCountry);
+		if(gameId.contains("_0") && state.equals("STARTED")) {
+			statistics.getPlayersCountries().add(playerCountry);
+		}
 		if(type.equals("PUBLIC") && state.equals("STARTED")) {
 				statistics.getPublicGamesStarted().add(gameId);
 				statisticsRepository.save(statistics);

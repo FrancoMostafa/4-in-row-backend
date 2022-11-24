@@ -29,7 +29,7 @@ public class StatisticsController {
 	}
 	
 	@CrossOrigin(origins = "${origin_frontend}")
-	@RequestMapping(value = "/get/{day}/{month}/{year}", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/{day}/{month}/{year}", method = RequestMethod.GET)
 	public ResponseEntity<StatisticsModel> getStatisticsByDate(@PathVariable Integer day,@PathVariable  Integer month, @PathVariable Integer year) {
 		StatisticsModel response = statisticsService.getStatisticsByDate(day, month, year);
 		return new ResponseEntity<StatisticsModel>(response, HttpStatus.OK);
