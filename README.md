@@ -1,4 +1,4 @@
-# Instalación:
+# Descripción:
 
 El proyecto corresponde a la parte del servidor del clásico juego de mesa "Cuatro en linea". Está realizado en java (Spring Boot).
 # Juego en línea:
