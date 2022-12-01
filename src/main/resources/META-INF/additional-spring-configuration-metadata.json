@@ -38,5 +38,10 @@
     "name": "ws.home.endpoint",
     "type": "java.lang.String",
     "description": "A description for 'ws.home.endpoint'"
+  },
+  {
+    "name": "origin_frontend",
+    "type": "java.lang.String",
+    "description": "A description for 'origin_frontend'"
   }
 ]}
